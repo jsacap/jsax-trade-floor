@@ -9,7 +9,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly.express as px
 st.set_page_config(layout='wide')
-# from streamlit_extras.app_logo import add_logo
+from streamlit_extras.app_logo import add_logo
 from streamlit_extras.dataframe_explorer import dataframe_explorer
 
 
@@ -24,7 +24,7 @@ with cl2:
 
 with cl3: 
     st.write(' ')
-# add_logo(r'C:\Users\saleg\Desktop\jupyter\Projects\JSAX_trade_floor\coin_logo.png')
+add_logo(r'C:\Users\saleg\Desktop\jupyter\Projects\JSAX_trade_floor\coin_logo.png')
 st.title('💡Trade Insights')
 
 # ---- Hide ST HTML ----
@@ -39,13 +39,22 @@ hide_st_style = """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
 
-# ---- Read existing data database----
-file_directory = r'C:\Users\saleg\Desktop\jupyter\Projects\JSAX_trade_floor'
-db_file = os.path.join(file_directory, 'trades.db')
-conn = sqlite3.connect(db_file)
-query = 'SELECT * FROM trades'
-df = pd.read_sql(query, conn)
-conn.close()
+# GitHub raw content URLs
+base_url = "https://raw.githubusercontent.com/jsacap/jsax-trade-floor/master/"
+csv_url = base_url + "trades.csv"
+db_url = base_url + "trades.db"
+
+def load_data():
+    db_response = requests.get(db_url)
+    with open('trades.db', 'wb') as db_file:
+        db_file.write(db_response.content)
+    conn = sqlite3.connect('trades.db')
+    query = "SELECT * FROM trades"
+    df = pd.read_sql(query, conn)
+    conn.close()
+    return df
+
+df = load_data()
 
 # Case insensitive TO BE COMPLETED
 
