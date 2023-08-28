@@ -9,7 +9,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly.express as px
 st.set_page_config(layout='wide')
-from streamlit_extras.app_logo import add_logo
+# from streamlit_extras.app_logo import add_logo
 from streamlit_extras.dataframe_explorer import dataframe_explorer
 
 
@@ -24,7 +24,7 @@ with cl2:
 
 with cl3: 
     st.write(' ')
-add_logo(r'C:\Users\saleg\Desktop\jupyter\Projects\JSAX_trade_floor\coin_logo.png')
+# add_logo(r'C:\Users\saleg\Desktop\jupyter\Projects\JSAX_trade_floor\coin_logo.png')
 st.title('💡Trade Insights')
 
 # ---- Hide ST HTML ----
