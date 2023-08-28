@@ -1,6 +1,7 @@
 import os
 import sqlite3
 import datetime as dt
+import requests
 import pandas as pd
 import streamlit as st
 import streamlit_extras

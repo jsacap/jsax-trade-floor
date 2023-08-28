@@ -1,4 +1,5 @@
 import pandas as pd
+import requests
 import datetime as dt
 import streamlit as st
 import os
@@ -25,19 +26,22 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 
 st.header('Deal Ticket')
 
-# --- Connect to database
-#Load to SQLite
-file_directory = (r'C:\Users\saleg\Desktop\jupyter\Projects\JSAX_trade_floor')
-db_file = os.path.join(file_directory , 'trades.db')
-conn = sqlite3.connect(db_file)
-query = "SELECT * FROM trades"
-df = pd.read_sql(query, conn)
+# GitHub raw content URLs
+base_url = "https://raw.githubusercontent.com/jsacap/jsax-trade-floor/master/"
+csv_url = base_url + "trades.csv"
+db_url = base_url + "trades.db"
 
-conn.close()
+def load_data():
+    db_response = requests.get(db_url)
+    with open('trades.db', 'wb') as db_file:
+        db_file.write(db_response.content)
+    conn = sqlite3.connect('trades.db')
+    query = "SELECT * FROM trades"
+    df = pd.read_sql(query, conn)
+    conn.close()
+    return df
 
-
-# Close connection
-conn.close()
+df = load_data()
 
 
 st.write(

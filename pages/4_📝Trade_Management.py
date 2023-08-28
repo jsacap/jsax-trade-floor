@@ -1,5 +1,6 @@
 import os
 import sqlite3
+import requests
 import datetime as dt
 import pandas as pd
 import streamlit as st
@@ -14,6 +15,23 @@ hide_st_style = """
         </style>
 """
 st.markdown(hide_st_style, unsafe_allow_html=True)
+
+# GitHub raw content URLs
+base_url = "https://raw.githubusercontent.com/jsacap/jsax-trade-floor/master/"
+csv_url = base_url + "trades.csv"
+db_url = base_url + "trades.db"
+
+def load_data():
+    db_response = requests.get(db_url)
+    with open('trades.db', 'wb') as db_file:
+        db_file.write(db_response.content)
+    conn = sqlite3.connect('trades.db')
+    query = "SELECT * FROM trades"
+    df = pd.read_sql(query, conn)
+    conn.close()
+    return df
+
+df = load_data()
 
 
 # ---- Page description ----
@@ -38,13 +56,7 @@ To delete a trade/row, click the checkbox on the left side of the first column, 
 To close a trade, double-click the "Result" cell of the trade you wish to close, enter the resulting pips, and press Enter. Save the changes and we'll take care of the rest by calculating the changes made and updating the database.
 """)
 
-# ---- load the DB into a DF ----
-file_directory = r'C:\Users\saleg\Desktop\jupyter\Projects\JSAX_trade_floor'
-db_file = os.path.join(file_directory, 'trades.db')
-conn = sqlite3.connect(db_file)
-query = 'SELECT * FROM trades'
-df = pd.read_sql(query, conn)
-conn.close()
+
 
 
 # Functions for calculations

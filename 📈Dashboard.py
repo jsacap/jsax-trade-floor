@@ -4,14 +4,15 @@ import pandas as pd
 import streamlit as st
 import seaborn as sns
 import matplotlib.pyplot as plt
+import requests
 
 # Layout
 
 st.set_page_config(page_title='JSAX Trade', page_icon='https://jsax.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fba07c969-ad44-4ac9-b475-1585436607ee%2FUntitled.png?table=block&id=8570f62a-2323-4bbd-ba98-e9043c3fa20b&spaceId=a34bbc1a-8979-401d-ac95-4dc80e288722&width=2000&userId=&cache=v2', layout='centered')
 st.image('https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F8587d9d9-ebba-474d-bbe3-2220a86e95be%2FUntitled.png?table=block&id=92875c04-e03b-4599-abf2-b810d8ea04df&spaceId=a34bbc1a-8979-401d-ac95-4dc80e288722&width=2000&userId=e094dc45-70bb-460a-8bf7-97e454446eca&cache=v2', width=600)
 st.header('🏦JSAX TRADE')
-from streamlit_extras.app_logo import add_logo
-add_logo(r'C:\Users\saleg\Desktop\jupyter\Projects\JSAX_trade_floor\coin_logo.png')
+# from streamlit_extras.app_logo import add_logo
+# add_logo(r'C:\Users\saleg\Desktop\jupyter\Projects\JSAX_trade_floor\coin_logo.png')
 
 
 st.markdown("---")
@@ -28,22 +29,26 @@ hide_st_style = """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
 
-# ---- Connect to the database ----
-file_directory = r'C:\Users\saleg\Desktop\jupyter\Projects\JSAX_trade_floor'
-csv_data = os.path.join(file_directory, 'trades.csv')
-db_file = os.path.join(file_directory, 'trades.db')
+# GitHub raw content URLs
+base_url = "https://raw.githubusercontent.com/jsacap/jsax-trade-floor/master/"
+csv_url = base_url + "trades.csv"
+db_url = base_url + "trades.db"
 
 def load_data():
-    if os.path.exists(db_file):
-        # Load from SQLite
-        conn = sqlite3.connect(db_file)
-        query = "SELECT * FROM trades"
-        df = pd.read_sql(query, conn)
-        conn.close()
-        if 'index' in df.columns:
-            df = df.drop('index', axis=1)  # Drop the existing index column
-            df.reset_index(drop=True, inplace=True)  # Reset the row indices
-            df['Trade ID'] = df.index + 1  # Create a new Trade ID column
+    db_response = requests.get(db_url)
+    with open('trades.db', 'wb') as db_file:
+        db_file.write(db_response.content)
+
+    conn = sqlite3.connect('trades.db')
+    query = "SELECT * FROM trades"
+    df = pd.read_sql(query, conn)
+    conn.close()
+
+
+    if 'index' in df.columns:
+        df = df.drop('index', axis=1)  # Drop the existing index column
+        df.reset_index(drop=True, inplace=True)  # Reset the row indices
+        df['Trade ID'] = df.index + 1  # Create a new Trade ID column
         # Calculate Rolling R values only for rows with None values
         rolling_r_mask = df['Rolling R'].isnull()
         df.loc[rolling_r_mask, 'Rolling R'] = df.loc[rolling_r_mask, 'R'].cumsum()
@@ -52,9 +57,7 @@ def load_data():
         conn = sqlite3.connect(db_file)
         df.to_sql('trades', conn, index=False, if_exists='replace')  # Replace the existing table with the updated DataFrame
         conn.close()
-    else:
-        df = pd.read_csv(csv_data)
-
+    
     return df
 
 df = load_data()
@@ -176,4 +179,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
