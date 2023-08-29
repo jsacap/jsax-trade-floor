@@ -1,4 +1,5 @@
 import os
+import datetime as dt
 import sqlite3
 import pandas as pd
 import streamlit as st
@@ -12,7 +13,7 @@ st.set_page_config(page_title='JSAX Trade', page_icon='https://jsax.notion.site/
 st.image('https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F8587d9d9-ebba-474d-bbe3-2220a86e95be%2FUntitled.png?table=block&id=92875c04-e03b-4599-abf2-b810d8ea04df&spaceId=a34bbc1a-8979-401d-ac95-4dc80e288722&width=2000&userId=e094dc45-70bb-460a-8bf7-97e454446eca&cache=v2', width=600)
 st.header('🏦JSAX TRADE')
 from streamlit_extras.app_logo import add_logo
-add_logo(r'C:\Users\saleg\Desktop\jupyter\Projects\JSAX_trade_floor\coin_logo.png')
+add_logo("https://raw.githubusercontent.com/jsacap/jsax-trade-floor/master/coin_logo.png")
 
 
 st.markdown("---")
@@ -53,10 +54,22 @@ def load_data():
         rolling_r_mask = df['Rolling R'].isnull()
         df.loc[rolling_r_mask, 'Rolling R'] = df.loc[rolling_r_mask, 'R'].cumsum()
 
-        # Save the updated DataFrame back to the database
-        conn = sqlite3.connect(db_file)
-        df.to_sql('trades', conn, index=False, if_exists='replace')  # Replace the existing table with the updated DataFrame
-        conn.close()
+    # Define the custom function
+    def get_trading_session(time):
+        if time >= dt.time(7, 0, 0) and time < dt.time(17, 0, 0):
+            return 'Asia'
+        elif time >= dt.time(17, 0, 0) and time < dt.time(23, 59, 59):
+            return 'London'
+        else:
+            return 'New York'
+
+    # Apply the custom function to create a new column
+    df['Trading Session'] = df['Time'].apply(get_trading_session)
+
+    # Save the updated DataFrame back to the database
+    conn = sqlite3.connect(db_file)
+    df.to_sql('trades', conn, index=False, if_exists='replace')  # Replace the existing table with the updated DataFrame
+    conn.close()
     
     return df
 

@@ -24,7 +24,7 @@ with cl2:
 
 with cl3: 
     st.write(' ')
-add_logo(r'C:\Users\saleg\Desktop\jupyter\Projects\JSAX_trade_floor\coin_logo.png')
+add_logo('https://raw.githubusercontent.com/jsacap/jsax-trade-floor/master/coin_logo.png')
 st.title('💡Trade Insights')
 
 # ---- Hide ST HTML ----

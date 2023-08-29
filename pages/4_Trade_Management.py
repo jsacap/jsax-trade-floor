@@ -46,7 +46,7 @@ with cl3:
 
 from streamlit_extras.app_logo import add_logo
 
-add_logo(r'C:\Users\saleg\Desktop\jupyter\Projects\JSAX_trade_floor\coin_logo.png')
+add_logo('https://raw.githubusercontent.com/jsacap/jsax-trade-floor/master/coin_logo.png')
 st.title('Trade Management')
 
 st.write("""In this section, you can edit, delete, and close trades. To edit a trade, simply double-click any of the cells, make your changes, and hit Enter. Then, click "Save Changes" to write your edits back to the database.
