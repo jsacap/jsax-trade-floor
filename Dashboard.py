@@ -34,18 +34,19 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 base_url = "https://raw.githubusercontent.com/jsacap/jsax-trade-floor/master/"
 csv_url = base_url + "trades.csv"
 db_url = base_url + "trades.db"
+db_filename = 'trades.db'
+db_path = os.path.abspath(db_filename)
 
 def load_data():
-    db_response = requests.get(db_url)
-    with open('trades.db', 'wb') as db_file:
-        db_file.write(db_response.content)
-
-    conn = sqlite3.connect('trades.db')
+    if os.path.exists(db_path):
+        conn = sqlite3.connect(db_path)
+    else:
+        conn = sqlite3(db_url)
     query = "SELECT * FROM trades"
     df = pd.read_sql(query, conn)
-    conn.close()
-
-
+    df['Time'] = df['Time'].str.split('.').str[0]
+    df['Time'] = pd.to_datetime(df['Time'], format='%H:%M:%S').dt.time
+    df['Date'] = pd.to_datetime(df['Date'])
     if 'index' in df.columns:
         df = df.drop('index', axis=1)  # Drop the existing index column
         df.reset_index(drop=True, inplace=True)  # Reset the row indices
@@ -53,7 +54,6 @@ def load_data():
         # Calculate Rolling R values only for rows with None values
         rolling_r_mask = df['Rolling R'].isnull()
         df.loc[rolling_r_mask, 'Rolling R'] = df.loc[rolling_r_mask, 'R'].cumsum()
-
     # Define the custom function
     def get_trading_session(time):
         if time >= dt.time(7, 0, 0) and time < dt.time(17, 0, 0):
@@ -62,15 +62,10 @@ def load_data():
             return 'London'
         else:
             return 'New York'
-
     # Apply the custom function to create a new column
     df['Trading Session'] = df['Time'].apply(get_trading_session)
-
-    # Save the updated DataFrame back to the database
-    conn = sqlite3.connect(db_file)
     df.to_sql('trades', conn, index=False, if_exists='replace')  # Replace the existing table with the updated DataFrame
     conn.close()
-    
     return df
 
 df = load_data()

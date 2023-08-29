@@ -43,12 +43,14 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 base_url = "https://raw.githubusercontent.com/jsacap/jsax-trade-floor/master/"
 csv_url = base_url + "trades.csv"
 db_url = base_url + "trades.db"
+db_filename = 'trades.db'
+db_path = os.path.abspath(db_filename)
 
 def load_data():
-    db_response = requests.get(db_url)
-    with open('trades.db', 'wb') as db_file:
-        db_file.write(db_response.content)
-    conn = sqlite3.connect('trades.db')
+    if os.path.exists(db_path):
+        conn = sqlite3.connect(db_path)
+    else:
+        conn = sqlite3(db_url)
     query = "SELECT * FROM trades"
     df = pd.read_sql(query, conn)
     conn.close()
@@ -56,8 +58,10 @@ def load_data():
 
 df = load_data()
 
+ 
 
 # Convert to date
+df['Date'] = pd.to_datetime(df['Date'])
 df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
 
 st.write(f"""
@@ -89,6 +93,12 @@ wins = df.loc[df['R'] > 0]
 top_wins = wins.nlargest(3, 'R')
 top_asset = top_wins['Asset'].values[0]
 top_asset_r = top_wins['R'].values[0]
+trading_session_r = df.groupby('Trading Session')['R'].sum()
+trading_session_r = trading_session_r.sort_values(ascending=False)
+top_session = trading_session_r.index[0]
+top_session_r = trading_session_r.values[0]
+
+
 
 # Drawdown calculation
 largest_drawdown = 0
@@ -105,8 +115,15 @@ for index, row in df.iterrows():
 if selected_month == 'Overall Performance':
     st.write(f"""
         # Overview
-        This is the report for {selected_month}.
+        This is the {selected_month} report.
         The total gain (in R multiple) in the course of the entire trading performance from the trades in tracked from the database is {overall_r}. 
         During this period, the largest drawdown experienced was at {largest_drawdown}.
-        The strongest trade was the {top_asset} returning a total of 
+        The strongest trade was the {top_asset} returning a total of {top_asset_r}! 
+        This was executed through a {top_wins['System Strategy'].values[0]} entering at
+        the {top_wins['Trade From'].values[0]} structure.
+        Trades executed during the {top_session} session has been most prfitable 
+        returning a total of {top_session_r}R whereas the weakest session was the 
+        {trading_session_r.index[2]} with a return of {trading_session_r.values[2]}. 
+        Trades during the {trading_session_r.index[1]} came in at second returning {trading_session_r.values[1]}R.
+        Here are a couple charts to plot the overview.
 """)
