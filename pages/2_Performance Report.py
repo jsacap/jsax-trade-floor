@@ -3,11 +3,14 @@ import sqlite3
 import datetime as dt
 import requests
 import pandas as pd
+
 import streamlit as st
 import streamlit_extras
 import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly.express as px
+from streamlit_lottie import st_lottie
+
 st.set_page_config(page_title='JSAX Trade',
                    layout='wide',
                    page_icon='https://jsax.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fba07c969-ad44-4ac9-b475-1585436607ee%2FUntitled.png?table=block&id=8570f62a-2323-4bbd-ba98-e9043c3fa20b&spaceId=a34bbc1a-8979-401d-ac95-4dc80e288722&width=2000&userId=&cache=v2')
@@ -15,18 +18,30 @@ from streamlit_extras.app_logo import add_logo
 from streamlit_extras.dataframe_explorer import dataframe_explorer
 
 
+def load_lottie(url: str):
+    r = requests.get(url)
+    if r.status_code != 200:
+        return None
+    return r.json()
+
+lottie_chart = load_lottie('https://lottie.host/84a0902b-928f-4f8c-812a-15bdf9c46f05/98hSJ2ichc.json')
+# Args for lottie - speed=*, 
+    # reverse=False, loop=True, quality='low', 
+    # render='sug' (canvas), height=*, width=*, key=None
 
 
 # ---- Page description ----
 cl1, cl2, cl3 = st.columns(3)
 with cl1:
-    st.write(' ')
+    st_lottie(lottie_chart, loop=False, speed=0.9)
 with cl2:
-    st.image('https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F8587d9d9-ebba-474d-bbe3-2220a86e95be%2FUntitled.png?table=block&id=92875c04-e03b-4599-abf2-b810d8ea04df&spaceId=a34bbc1a-8979-401d-ac95-4dc80e288722&width=2000&userId=e094dc45-70bb-460a-8bf7-97e454446eca&cache=v2', width=800)
+    st.write(' ')
+    # st.image('https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F8587d9d9-ebba-474d-bbe3-2220a86e95be%2FUntitled.png?table=block&id=92875c04-e03b-4599-abf2-b810d8ea04df&spaceId=a34bbc1a-8979-401d-ac95-4dc80e288722&width=2000&userId=e094dc45-70bb-460a-8bf7-97e454446eca&cache=v2', width=800)
 with cl3: 
     st.write(' ')
 add_logo('https://raw.githubusercontent.com/jsacap/jsax-trade-floor/master/coin_logo.png')
 st.title('Performance Report')
+
 
 # ---- Hide ST HTML ----
 hide_st_style = """
@@ -85,25 +100,26 @@ selected_month = st.selectbox("Select a Report", available_months)
 if selected_month == 'Overall Performance':
     selected_df = df
 else:
-    selected_df = df[df['Month'].isin(selected_month)]
+    selected_df = df[df['Month'] == selected_month]
 
 # Variables for the Overall report
-overall_r = df['R'].sum()
-wins = df.loc[df['R'] > 0]
+overall_r = selected_df['R'].sum()
+wins = selected_df.loc[selected_df['R'] > 0]
 top_wins = wins.nlargest(3, 'R')
 top_asset = top_wins['Asset'].values[0]
 top_asset_r = top_wins['R'].values[0]
-trading_session_r = df.groupby('Trading Session')['R'].sum()
+trading_session_r = selected_df.groupby('Trading Session')['R'].sum()
 trading_session_r = trading_session_r.sort_values(ascending=False)
 top_session = trading_session_r.index[0]
 top_session_r = trading_session_r.values[0]
+asset_r = selected_df.groupby('Asset')['R'].sum().sort_values(ascending=False).reset_index()
 
 
 
 # Drawdown calculation
 largest_drawdown = 0
-peak_value = df['Rolling R'].iloc[0]
-for index, row in df.iterrows():
+peak_value = selected_df['Rolling R'].iloc[0]
+for index, row in selected_df.iterrows():
     if row['Rolling R'] > peak_value:
         peak_value = row['Rolling R']
     else:
@@ -112,18 +128,109 @@ for index, row in df.iterrows():
 
 
 #Overall report
-if selected_month == 'Overall Performance':
-    st.write(f"""
-        # Overview
-        This is the {selected_month} report.
-        The total gain (in R multiple) in the course of the entire trading performance from the trades in tracked from the database is {overall_r}. 
-        During this period, the largest drawdown experienced was at {largest_drawdown}.
-        The strongest trade was the {top_asset} returning a total of {top_asset_r}! 
-        This was executed through a {top_wins['System Strategy'].values[0]} entering at
-        the {top_wins['Trade From'].values[0]} structure.
-        Trades executed during the {top_session} session has been most prfitable 
-        returning a total of {top_session_r}R whereas the weakest session was the 
-        {trading_session_r.index[2]} with a return of {trading_session_r.values[2]}. 
-        Trades during the {trading_session_r.index[1]} came in at second returning {trading_session_r.values[1]}R.
-        Here are a couple charts to plot the overview.
+# if selected_month == 'Overall Performance':
+st.write(f"""
+    # Overview
+    This is the {selected_month} report.
+    The total gain (in R multiple) in the course of the entire trading performance from the trades in tracked from the database is {overall_r}. 
+    During this period, the largest drawdown experienced was at {largest_drawdown}.
+    The strongest trade was the {top_asset} returning a total of {top_asset_r}! 
+    This was executed through a {top_wins['System Strategy'].values[0]} entering at
+    the {top_wins['Trade From'].values[0]} structure.
+    Trades executed during the {top_session} session has been most prfitable 
+    returning a total of {top_session_r}R whereas the weakest session was the 
+    {trading_session_r.index[2]} with a return of {trading_session_r.values[2]}. 
+    Trades during the {trading_session_r.index[1]} came in at second returning {trading_session_r.values[1]}R.
+    Here are a couple charts to plot the overview.
 """)
+    
+# Plotting the overview chart
+def plot_rolling_r():
+    fig = px.line(selected_df, x='Trade ID', y='Rolling R', title='R CUrve')
+    fig.update_layout(plot_bgcolor='#0a0a0a')
+    st.plotly_chart(fig)
+
+def plot_asset_r():
+    fig = px.bar(asset_r, x='Asset', y='R', title='Asset Traded Based Returns')
+    fig.update_layout(plot_bgcolor='#0a0a0a')
+    st.plotly_chart(fig)
+
+col1, col2 = st.columns(2)
+with col1:
+    plot_rolling_r()
+with col2:
+    plot_asset_r()
+
+
+# Variables used for the next section
+trade_type = df.groupby('Trade Type')['R'].sum().sort_values(ascending=False).reset_index()
+trade_type_list = [trade_type_name.title() for trade_type_name in trade_type['Trade Type']]
+trade_type_string = ', '.join(trade_type_list)
+trade_type_string = ', '.join(trade_type_list)
+trade_type_1 = trade_type['Trade Type'].iloc[0]
+trade_type_2 = trade_type['Trade Type'].iloc[1]
+trade_type_3 = trade_type['Trade Type'].iloc[2]
+trade_type1_df = df[df['Trade Type'] == trade_type_1]
+trade_type2_df = df[df['Trade Type'] == trade_type_2]
+trade_type3_df = df[df['Trade Type'] == trade_type_3]
+trade_type1_df = trade_type1_df.groupby(['Asset', 'System Strategy', 'Trade From'])['R'].sum().sort_values(ascending=False).reset_index()
+
+
+
+st.write(f"""
+# Diving Deeper
+Let's take a deep dive into the stats to gain more valuable insights.
+         
+## Trade Type
+The total number of trade types in the trading data is {len(trade_type)}:
+ {trade_type_string}. With each of these trade types this is how they 
+performed: 
+- The strongest one being {trade_type['Trade Type'].iloc[0]} returning 
+a total of {trade_type['R'].iloc[0]}R. 
+- Followed by {trade_type['Trade Type'].iloc[1]}
+ returning a total of {trade_type['R'].iloc[1]} 
+ - Lastly, the {trade_type['Trade Type'].iloc[2]}
+ with a return of {trade_type['R'].iloc[2]}.
+ 
+
+ ### {trade_type['Trade Type'].iloc[0].title()}
+Starting witht the top of the list and working our way down we can take a better
+look at which type of {trade_type['Trade Type'].iloc[0]} trades worked best
+with different setups and where they were traded from. Filtering the data
+I will present this through the dataframe itself, followed by 2 scatter plots,
+first being the winning trades, the second being the losing ones. 
+This isa 3D scatter plot in which you can move the chart around to get a better
+view of different areas.
+""")
+# Charting the data
+
+def plot_trade_type1_positive():
+    positive_df = trade_type1_df[trade_type1_df['R'] >= 0]
+    fig_positive = px.scatter_3d(positive_df, x='Asset', y='System Strategy', z='Trade From', 
+                            color='R', color_continuous_scale='Viridis', opacity=0.7, 
+                            title='Scatter Plot based on Winning Trades')
+    fig_positive.update_layout(scene=dict(bgcolor='#0a0a0a'))
+
+    st.plotly_chart(fig_positive)
+
+def plot_trade_type1_negative():
+    negative_df = trade_type1_df[trade_type1_df['R'] < 0]
+    
+    fig_negative = px.scatter_3d(negative_df, x='Asset', y='System Strategy', z='Trade From', 
+                                color='R', color_continuous_scale='RdBu', opacity=0.7, 
+                                title='Negative R Values by Asset, System Strategy, and Trade From')
+    fig_negative.update_layout(scene=dict(bgcolor='#0a0a0a'))
+
+
+    st.plotly_chart(fig_negative)
+
+# Configuring layout
+col3, col4, col5 = st.columns(3)
+with col3:
+    st.write(trade_type1_df)
+with col4:
+    plot_trade_type1_positive()
+with col5:
+    plot_trade_type1_negative()
+
+

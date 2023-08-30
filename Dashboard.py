@@ -28,6 +28,11 @@ hide_st_style = """
         </style>
 """
 st.markdown(hide_st_style, unsafe_allow_html=True)
+hide_footer_style = """
+<style>
+.reportview-container .main footer {visibility: hidden;}    
+"""
+st.markdown(hide_footer_style, unsafe_allow_html=True)
 
 
 # GitHub raw content URLs
@@ -47,6 +52,7 @@ def load_data():
     df['Time'] = df['Time'].str.split('.').str[0]
     df['Time'] = pd.to_datetime(df['Time'], format='%H:%M:%S').dt.time
     df['Date'] = pd.to_datetime(df['Date'])
+    df['Trade Type'] = df['Trade Type'].str.lower().str.replace('-', ' ')
     if 'index' in df.columns:
         df = df.drop('index', axis=1)  # Drop the existing index column
         df.reset_index(drop=True, inplace=True)  # Reset the row indices
