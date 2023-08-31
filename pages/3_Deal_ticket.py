@@ -30,12 +30,14 @@ st.header('Deal Ticket')
 base_url = "https://raw.githubusercontent.com/jsacap/jsax-trade-floor/master/"
 csv_url = base_url + "trades.csv"
 db_url = base_url + "trades.db"
+db_filename = 'trades.db'
+db_path = os.path.abspath(db_filename)
 
 def load_data():
-    db_response = requests.get(db_url)
-    with open('trades.db', 'wb') as db_file:
-        db_file.write(db_response.content)
-    conn = sqlite3.connect('trades.db')
+    if os.path.exists(db_path):
+        conn = sqlite3.connect(db_path)
+    else:
+        conn = sqlite3(db_url)
     query = "SELECT * FROM trades"
     df = pd.read_sql(query, conn)
     conn.close()
@@ -133,7 +135,7 @@ with st.form(key='new_trade_form'):
         new_row_df = new_row_df.reset_index(drop=True)
         # Reset index for the entire df
         df_reset = df.reset_index(drop=True)
-        conn = sqlite3.connect(db_file)
+        conn = sqlite3.connect(db_path)
         new_row_df.to_sql('trades', conn, if_exists='append', index=False)
         query_post_trade = f'SELECT * FROM trades ORDER BY rowid DESC LIMIT 5'
         db_tail = pd.read_sql(query_post_trade, conn)
@@ -141,3 +143,4 @@ with st.form(key='new_trade_form'):
         st.success('Trade successfully saved to database')
         st.write(f'You traded the {asset}, and used the {system_strategy} for your entry on the {timeframe} timeframe. The entry was from the {trade_from}, and was a {trade_type} trade.')
         st.write(db_tail)
+        st.balloons()

@@ -17,14 +17,13 @@ st.set_page_config(page_title='JSAX Trade',
 from streamlit_extras.app_logo import add_logo
 from streamlit_extras.dataframe_explorer import dataframe_explorer
 
-
 def load_lottie(url: str):
     r = requests.get(url)
     if r.status_code != 200:
         return None
     return r.json()
 
-lottie_chart = load_lottie('https://lottie.host/84a0902b-928f-4f8c-812a-15bdf9c46f05/98hSJ2ichc.json')
+lottie_chart = load_lottie('https://lottie.host/42788987-5c50-4581-9028-8073e83c92b4/Lmu8OPV7UQ.json')
 # Args for lottie - speed=*, 
     # reverse=False, loop=True, quality='low', 
     # render='sug' (canvas), height=*, width=*, key=None
@@ -36,7 +35,7 @@ with cl1:
     st_lottie(lottie_chart, loop=False, speed=0.9)
 with cl2:
     st.write(' ')
-    # st.image('https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F8587d9d9-ebba-474d-bbe3-2220a86e95be%2FUntitled.png?table=block&id=92875c04-e03b-4599-abf2-b810d8ea04df&spaceId=a34bbc1a-8979-401d-ac95-4dc80e288722&width=2000&userId=e094dc45-70bb-460a-8bf7-97e454446eca&cache=v2', width=800)
+    st.image('https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F8587d9d9-ebba-474d-bbe3-2220a86e95be%2FUntitled.png?table=block&id=92875c04-e03b-4599-abf2-b810d8ea04df&spaceId=a34bbc1a-8979-401d-ac95-4dc80e288722&width=2000&userId=e094dc45-70bb-460a-8bf7-97e454446eca&cache=v2', width=800)
 with cl3: 
     st.write(' ')
 add_logo('https://raw.githubusercontent.com/jsacap/jsax-trade-floor/master/coin_logo.png')
@@ -162,10 +161,9 @@ with col2:
     plot_asset_r()
 
 
-# Variables used for the next section
+# Variables used for the Trade Type section
 trade_type = df.groupby('Trade Type')['R'].sum().sort_values(ascending=False).reset_index()
 trade_type_list = [trade_type_name.title() for trade_type_name in trade_type['Trade Type']]
-trade_type_string = ', '.join(trade_type_list)
 trade_type_string = ', '.join(trade_type_list)
 trade_type_1 = trade_type['Trade Type'].iloc[0]
 trade_type_2 = trade_type['Trade Type'].iloc[1]
@@ -173,15 +171,17 @@ trade_type_3 = trade_type['Trade Type'].iloc[2]
 trade_type1_df = df[df['Trade Type'] == trade_type_1]
 trade_type2_df = df[df['Trade Type'] == trade_type_2]
 trade_type3_df = df[df['Trade Type'] == trade_type_3]
-trade_type1_df = trade_type1_df.groupby(['Asset', 'System Strategy', 'Trade From'])['R'].sum().sort_values(ascending=False).reset_index()
-
-
-
+# trade_type1_df = trade_type1_df.groupby(['Asset', 'System Strategy', 'Trade From'])['R'].sum().sort_values(ascending=False).reset_index()
+trade_type1_asset = trade_type1_df.groupby('Asset')['R'].sum().sort_values(ascending=False).reset_index()
+trade_type1_system = trade_type1_df.groupby('System Strategy')['R'].sum().sort_values(ascending=False).reset_index()
+trade_type1_tradefrom = trade_type1_df.groupby('Trade From')['R'].sum().sort_values(ascending=False).reset_index()
 st.write(f"""
 # Diving Deeper
 Let's take a deep dive into the stats to gain more valuable insights.
          
-## Trade Type
+## Who, What & Where
+         This section will run through the who(Assets), the what(Strategies), and
+         where (structure of where the trade was taken).
 The total number of trade types in the trading data is {len(trade_type)}:
  {trade_type_string}. With each of these trade types this is how they 
 performed: 
@@ -197,12 +197,29 @@ a total of {trade_type['R'].iloc[0]}R.
 Starting witht the top of the list and working our way down we can take a better
 look at which type of {trade_type['Trade Type'].iloc[0]} trades worked best
 with different setups and where they were traded from. Filtering the data
-I will present this through the dataframe itself, followed by 2 scatter plots,
-first being the winning trades, the second being the losing ones. 
-This isa 3D scatter plot in which you can move the chart around to get a better
-view of different areas.
+I will present this through the dataframe itself, followed by a couple plots to 
+visualise our data. I have listed the tables below that describe each of the 
+variables in the execution of the {trade_type_1} trade3
+The {trade_type_1.title()} setups accu,accumulated a total return of {trade_type1_df['R'].sum()}R.
+
 """)
+
 # Charting the data
+
+def plot_trade_type1_asset():
+    fig = px.scatter(trade_type1_asset, x='Asset', y='R', 
+                     height=400, title='Asset Scatter Plot')
+    st.plotly_chart(fig)
+
+def plot_trade_type2_asset():
+    fig = px.scatter(trade_type2_asset, x='Asset', y='R', 
+                     height=400, title='Asset Scatter Plot')
+    st.plotly_chart(fig)
+
+def plot_trade_type1_system():
+    fig = px.bar(trade_type1_system, x='R', y='System Strategy', orientation='h',
+                 title=f'{trade_type_1} Strategy Performance')
+    st.plotly_chart(fig)
 
 def plot_trade_type1_positive():
     positive_df = trade_type1_df[trade_type1_df['R'] >= 0]
@@ -210,27 +227,97 @@ def plot_trade_type1_positive():
                             color='R', color_continuous_scale='Viridis', opacity=0.7, 
                             title='Scatter Plot based on Winning Trades')
     fig_positive.update_layout(scene=dict(bgcolor='#0a0a0a'))
-
     st.plotly_chart(fig_positive)
 
-def plot_trade_type1_negative():
-    negative_df = trade_type1_df[trade_type1_df['R'] < 0]
-    
-    fig_negative = px.scatter_3d(negative_df, x='Asset', y='System Strategy', z='Trade From', 
-                                color='R', color_continuous_scale='RdBu', opacity=0.7, 
-                                title='Negative R Values by Asset, System Strategy, and Trade From')
-    fig_negative.update_layout(scene=dict(bgcolor='#0a0a0a'))
 
+def plot_trade_system_pie():
+    positive_df = trade_type1_df[trade_type1_df['R'] >= 0]
+    fig = px.pie(positive_df, values='R', names='Asset', title='Profitable Assets Traded')
+    color_scale = px.colors.sequential.Viridis  # You can use any color scale
+    fig.update_traces(marker=dict(colors=color_scale))
+    st.plotly_chart(fig)
 
-    st.plotly_chart(fig_negative)
+def plot_system_bar():
+    positive_df = trade_type1_df[trade_type1_df['R'] >= 0]
+    fig = px.bar(positive_df, x='R', y='System Strategy', orientation='h')
 
-# Configuring layout
-col3, col4, col5 = st.columns(3)
+    st.plotly_chart(fig)
+
+# Plotting 
+trade_type1_df
+
+col3, col4, col5 = st.columns([1, 3, 3])
 with col3:
-    st.write(trade_type1_df)
+    trade_type1_asset
 with col4:
-    plot_trade_type1_positive()
+    # plot_trade_type1_asset()
+    st.bar_chart(trade_type1_asset, x='Asset', y='R')
 with col5:
-    plot_trade_type1_negative()
+    plot_trade_type1_asset()
 
+col6, col7, col8 = st.columns([1, 3, 3])
+with col6:
+    trade_type1_system
+with col7:
+    st.bar_chart(trade_type1_system, x='System Strategy', y='R', height=400)
+with col8:
+    st.area_chart(trade_type1_system, x='R', y='System Strategy')
 
+col9, col10, col11 = st.columns([1, 3, 3])
+with col9:
+    trade_type1_tradefrom
+with col10:
+    st.bar_chart(trade_type1_tradefrom, x='R', y='Trade From')
+with col11:
+    st.area_chart(trade_type1_tradefrom, x='Trade From', y='R')
+
+st.write(f"""
+### {trade_type_2.title()}
+Next on the list of trades to analyse is the {trade_type_2.title()}. These types of
+trades closed at a total R of {trade_type2_df['R'].sum()}. The top performer here was 
+the 
+{trade_type1_df.groupby('Asset').sum().sort_values(by='R', ascending=False).reset_index().iloc[0]['Asset']}
+which returned a total of 
+{trade_type1_df.groupby('Asset').sum().sort_values(by='R', ascending=False).reset_index().iloc[0]['R']}
+On the flipside, the weakest performing asset was the
+{trade_type1_df.groupby('Asset').sum().sort_values(by='R', ascending=False).reset_index().iloc[-1]['Asset']}
+which closed at 
+{trade_type1_df.groupby('Asset').sum().sort_values(by='R', ascending=False).reset_index().iloc[-1]['R']}
+Now, to visualise our data, we will be plotting the same charts as we did in the 
+{trade_type_1} section.
+""")
+
+# Variables for next section
+trade_type2_asset = trade_type1_df.groupby('Asset')['R'].sum().sort_values(ascending=False).reset_index()
+trade_type2_system = trade_type1_df.groupby('System Strategy')['R'].sum().sort_values(ascending=False).reset_index()
+trade_type2_tradefrom = trade_type1_df.groupby('Trade From')['R'].sum().sort_values(ascending=False).reset_index()
+
+# Charting
+
+# Plotting 
+trade_type2_df
+
+col12, col13, col14 = st.columns([1, 3, 3])
+with col12:
+    trade_type2_asset
+with col13:
+    # plot_trade_type2_asset()
+    st.bar_chart(trade_type2_asset, x='Asset', y='R')
+with col14:
+    plot_trade_type2_asset()
+
+col15, col16, col17 = st.columns([1, 3, 3])
+with col15:
+    trade_type2_system
+with col16:
+    st.bar_chart(trade_type2_system, x='System Strategy', y='R', height=400)
+with col17:
+    st.area_chart(trade_type2_system, x='R', y='System Strategy')
+
+col18, col19, col20 = st.columns([1, 3, 3])
+with col18:
+    trade_type2_tradefrom
+with col19:
+    st.bar_chart(trade_type2_tradefrom, x='R', y='Trade From')
+with col20:
+    st.area_chart(trade_type2_tradefrom, x='Trade From', y='R')
