@@ -271,18 +271,18 @@ def plot_trade_type1_positive():
     st.plotly_chart(fig_positive)
 
 
-def plot_trade_system_pie():
-    positive_df = trade_type1_df[trade_type1_df['R'] >= 0]
-    fig = px.pie(positive_df, values='R', names='Asset', title='Profitable Assets Traded')
-    color_scale = px.colors.sequential.Viridis  # You can use any color scale
-    fig.update_traces(marker=dict(colors=color_scale))
-    st.plotly_chart(fig)
+# def plot_trade_system_pie():
+#     positive_df = trade_type1_df[trade_type1_df['R'] >= 0]
+#     fig = px.pie(positive_df, values='R', names='Asset', title='Profitable Assets Traded')
+#     color_scale = px.colors.sequential.Viridis  # You can use any color scale
+#     fig.update_traces(marker=dict(colors=color_scale))
+#     st.plotly_chart(fig)
 
-def plot_system_bar():
-    positive_df = trade_type1_df[trade_type1_df['R'] >= 0]
-    fig = px.bar(positive_df, x='R', y='System Strategy', orientation='h')
+# def plot_system_bar():
+#     positive_df = trade_type1_df[trade_type1_df['R'] >= 0]
+#     fig = px.bar(positive_df, x='R', y='System Strategy', orientation='h')
 
-    st.plotly_chart(fig)
+#     st.plotly_chart(fig)
 
 # Plotting 
 trade_type1_df
