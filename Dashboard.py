@@ -42,6 +42,8 @@ db_url = base_url + "trades.db"
 db_filename = 'trades.db'
 db_path = os.path.abspath(db_filename)
 
+
+@st.cache_data
 def load_data():
     if os.path.exists(db_path):
         conn = sqlite3.connect(db_path)
@@ -49,9 +51,9 @@ def load_data():
         conn = sqlite3(db_url)
     query = "SELECT * FROM trades"
     df = pd.read_sql(query, conn)
-    df['Time'] = df['Time'].str.split('.').str[0]
-    df['Time'] = pd.to_datetime(df['Time'], format='%H:%M:%S').dt.time
     df['Date'] = pd.to_datetime(df['Date'])
+    df['Month'] = df['Date'].dt.month
+    df['Time'] = pd.to_datetime(df['Time']).dt.time
     df['Trade Type'] = df['Trade Type'].str.lower().str.replace('-', ' ')
     if 'index' in df.columns:
         df = df.drop('index', axis=1)  # Drop the existing index column
