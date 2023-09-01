@@ -176,7 +176,7 @@ def main():
     col1, col2, col3 = st.columns(3)
     col1.metric('Top Perming Asset', top_asset)
     col2.metric('Return on Top Asset (R)', top_asset_r)
-    col3.metric('Net R', net_r, delta=f'{change_this_month} R this month')
+    col3.metric('Overall Performance', f'{net_r} R', delta=f'{change_this_month} R this month')
 
     st.markdown("---")
     plot_line_chart()

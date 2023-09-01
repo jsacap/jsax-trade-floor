@@ -6,7 +6,6 @@ import pandas as pd
 
 import streamlit as st
 import streamlit_extras
-import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly.express as px
 from streamlit_lottie import st_lottie
@@ -54,7 +53,7 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 
 
 # GitHub raw content URLs
-base_url = "https://raw.githubusercontent.com/jsacap/jsax-trade-floor/master/"
+base_url = "https://github.com/jsacap/jsax-trade-floor"
 csv_url = base_url + "trades.csv"
 db_url = base_url + "trades.db"
 db_filename = 'trades.db'
@@ -102,7 +101,7 @@ else:
     selected_df = df[df['Month'] == selected_month]
 
 # Variables for the Overall report
-overall_r = selected_df['R'].sum()
+overall_r = round(selected_df['R'].sum(), 2)
 wins = selected_df.loc[selected_df['R'] > 0]
 top_wins = wins.nlargest(3, 'R')
 top_asset = top_wins['Asset'].values[0]
@@ -112,8 +111,6 @@ trading_session_r = trading_session_r.sort_values(ascending=False)
 top_session = trading_session_r.index[0]
 top_session_r = trading_session_r.values[0]
 asset_r = selected_df.groupby('Asset')['R'].sum().sort_values(ascending=False).reset_index()
-
-
 
 # Drawdown calculation
 largest_drawdown = 0
@@ -125,25 +122,67 @@ for index, row in selected_df.iterrows():
         drawdown = peak_value - row['Rolling R']
         largest_drawdown = max(largest_drawdown, drawdown)
 
+# Metrics
+# Total R, 2-Average Win R, 3-Peak Value, 4-Drawdown, 5-Profit factor
+sum_positive_r = selected_df[selected_df['R'] > 0]['R'].sum()
+sum_negative_r = selected_df[selected_df['R'] < 0]['R'].abs().sum()
+profit_factor = round(sum_positive_r / sum_negative_r, 2)
+
+mt1, mt2, mt3, mt4, mt5 = st.columns(5)
+mt1.metric('Total Return (R)', round(selected_df['R'].sum(), 2))
+mt2.metric('Avg. Winning R', round(df[df['R'] >0]['R'].mean(), 2))
+mt3.metric('Peak Value', round(df['Rolling R'].max(), 2))           
+mt4.metric('Max Drawdown', largest_drawdown)
+mt5.metric('Profit Factor', profit_factor)
 
 #Overall report
 # if selected_month == 'Overall Performance':
 st.write(f"""
     # Overview
     This is the {selected_month} report.
-    The total gain (in R multiple) in the course of the entire trading performance from the trades in tracked from the database is {overall_r}. 
+    The total gain (in R multiple) during this period  is {overall_r}. 
     During this period, the largest drawdown experienced was at {largest_drawdown}.
     The strongest trade was the {top_asset} returning a total of {top_asset_r}! 
     This was executed through a {top_wins['System Strategy'].values[0]} entering at
     the {top_wins['Trade From'].values[0]} structure.
-    Trades executed during the {top_session} session has been most prfitable 
+    Trades executed during the {top_session} session has been most profitable 
     returning a total of {top_session_r}R whereas the weakest session was the 
-    {trading_session_r.index[2]} with a return of {trading_session_r.values[2]}. 
+    {trading_session_r.index[2]} with a return of {round(trading_session_r.values[2], 2)}. 
     Trades during the {trading_session_r.index[1]} came in at second returning {trading_session_r.values[1]}R.
     Here are a couple charts to plot the overview.
 """)
     
 # Plotting the overview chart
+# Strike Rate
+
+def plot_strike_rate():
+    wins = selected_df[selected_df['R'] > 0]['R'].count()
+    losses = selected_df[selected_df['R'] < 0]['R'].count()
+    total_trades = wins + losses
+    strike_rate = wins / total_trades
+    win_percentage = round(strike_rate * 100, 2)
+    annotation_text = f'{round(win_percentage, 2)}%'
+
+    fig = px.pie(
+        names=['Wins', 'Losses'],
+        values=[wins, losses],
+        title='Strike Rate',
+        hole=0.7,
+        labels={'Wins': 'Wins', 'Losses': 'Losses'}, 
+    )
+    fig.update_traces(
+        marker=dict(colors=['#1717bd', '#2e2e40']),
+        text=[f'{wins} Wins', f'{losses} Losses'],  # Display the actual win and loss counts in the chart
+        textinfo='none',  # Display both the percentage and label (Wins/Losses)
+    )
+    fig.add_annotation(
+        text=annotation_text,
+        x=0.5, y=0.5,  # Position of the annotation in the center of the hole
+        showarrow=False,  # Hide the arrow for the annotation
+        font=dict(size=32),  # Customize the font size of the annotation
+    )
+    st.plotly_chart(fig)
+
 def plot_rolling_r():
     fig = px.line(selected_df, x='Trade ID', y='Rolling R', title='R CUrve')
     fig.update_layout(plot_bgcolor='#0a0a0a')
@@ -154,11 +193,13 @@ def plot_asset_r():
     fig.update_layout(plot_bgcolor='#0a0a0a')
     st.plotly_chart(fig)
 
-col1, col2 = st.columns(2)
+col1, col2, coll3  = st.columns(3)
 with col1:
     plot_rolling_r()
 with col2:
     plot_asset_r()
+with coll3:
+    plot_strike_rate()
 
 
 # Variables used for the Trade Type section
