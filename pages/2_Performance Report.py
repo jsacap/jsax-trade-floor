@@ -79,7 +79,7 @@ def load_data():
     df['Month'] = df['Month'].apply(lambda m: calendar.month_name[int(m)])
 
 df = load_data()
-st.write*df
+st.write(df)
 
  
 
