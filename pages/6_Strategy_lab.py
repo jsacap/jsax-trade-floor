@@ -58,6 +58,8 @@ csv_url = base_url + "trades.csv"
 db_url = base_url + "trades.db"
 db_filename = 'trades.db'
 db_path = os.path.abspath(db_filename)
+@st.cache_data
+
 
 def load_data():
     if os.path.exists(db_path):

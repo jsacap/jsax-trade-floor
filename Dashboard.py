@@ -47,8 +47,10 @@ db_path = os.path.abspath(db_filename)
 def load_data():
     if os.path.exists(db_path):
         conn = sqlite3.connect(db_path)
+        st.write('Database from local')
     else:
         conn = sqlite3(db_url)
+        st.write('Database from GitHub')
     query = "SELECT * FROM trades"
     df = pd.read_sql(query, conn)
     df['Date'] = pd.to_datetime(df['Date'])

@@ -1,5 +1,6 @@
 import os
 import sqlite3
+import calendar
 import datetime as dt
 import requests
 import pandas as pd
@@ -16,6 +17,7 @@ st.set_page_config(page_title='JSAX Trade',
 from streamlit_extras.app_logo import add_logo
 from streamlit_extras.dataframe_explorer import dataframe_explorer
 
+@st.cache_data
 def load_lottie(url: str):
     r = requests.get(url)
     if r.status_code != 200:
@@ -55,18 +57,26 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 # GitHub raw content URLs
 base_url = "https://github.com/jsacap/jsax-trade-floor"
 csv_url = base_url + "trades.csv"
-db_url = base_url + "trades.db"
+db_url = 'https://github.com/jsacap/jsax-trade-floor/raw/master/trades.db'
 db_filename = 'trades.db'
 db_path = os.path.abspath(db_filename)
 
+@st.cache_data
 def load_data():
     if os.path.exists(db_path):
         conn = sqlite3.connect(db_path)
+        st.write('DB local')
     else:
-        conn = sqlite3(db_url)
+        conn = sqlite3.connect(db_url)
+        st.write('DB', db_url)
     query = "SELECT * FROM trades"
     df = pd.read_sql(query, conn)
     conn.close()
+    df['Date'] = pd.to_datetime(df['Date'])
+    df['Month'] = df['Date'].dt.month
+    df['Time'] = pd.to_datetime(df['Time'], format='%H:%M:%S.%f').dt.strftime('%H:%M')
+    df['Month'] = df['Month'].apply(lambda m: calendar.month_name[int(m)])
+
     return df
 
 df = load_data()
@@ -74,7 +84,6 @@ df = load_data()
  
 
 # Convert to date
-df['Date'] = pd.to_datetime(df['Date'])
 df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
 
 st.write(f"""
@@ -86,8 +95,6 @@ The report is divided into multiple sections to provide a detailed analysis of t
 """)
 
 # Prepping the choices for months
-df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
-df['Month'] = df['Date'].dt.strftime('%B %Y')
 available_months = df['Month'].unique()
 available_months = ['Overall Performance'] + list(available_months)
 
