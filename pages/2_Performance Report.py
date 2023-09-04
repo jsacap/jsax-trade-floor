@@ -76,9 +76,10 @@ def load_data():
     df['Date'] = pd.to_datetime(df['Date'])
     df['Month'] = df['Date'].dt.month
     df['Time'] = pd.to_datetime(df['Time'], format='%H:%M:%S.%f').dt.strftime('%H:%M')
-    df['Month'] = df['Month'].apply(lambda m: calendar.month_name[int(m)])
 
 df = load_data()
+df['Month'] = df['Month'].apply(lambda m: calendar.month_name[int(m)])
+
 st.write(df)
 
  
