@@ -55,49 +55,32 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 
 
 # GitHub raw content URLs
-base_url = "https://raw.githubusercontent.com/jsacap/jsax-trade-floor/master/"
+base_url = "https://github.com/jsacap/jsax-trade-floor"
 csv_url = base_url + "trades.csv"
-db_url = base_url + "trades.db"
+db_url = 'https://github.com/jsacap/jsax-trade-floor/raw/master/trades.db'
 db_filename = 'trades.db'
 db_path = os.path.abspath(db_filename)
-
 
 @st.cache_data
 def load_data():
     if os.path.exists(db_path):
         conn = sqlite3.connect(db_path)
-        st.write('Database from local')
+        st.write('DB local')
     else:
-        conn = sqlite3(db_url)
-        st.write('Database from GitHub')
+        conn = sqlite3.connect(db_url)
+        st.write('DB', db_url)
     query = "SELECT * FROM trades"
     df = pd.read_sql(query, conn)
+    conn.close()
     df['Date'] = pd.to_datetime(df['Date'])
     df['Month'] = df['Date'].dt.month
-    df['Time'] = pd.to_datetime(df['Time']).dt.time
-    df['Trade Type'] = df['Trade Type'].str.lower().str.replace('-', ' ')
-    if 'index' in df.columns:
-        df = df.drop('index', axis=1)  # Drop the existing index column
-        df.reset_index(drop=True, inplace=True)  # Reset the row indices
-        df['Trade ID'] = df.index + 1  # Create a new Trade ID column
-        # Calculate Rolling R values only for rows with None values
-        rolling_r_mask = df['Rolling R'].isnull()
-        df.loc[rolling_r_mask, 'Rolling R'] = df.loc[rolling_r_mask, 'R'].cumsum()
-    # Define the custom function
-    def get_trading_session(time):
-        if time >= dt.time(7, 0, 0) and time < dt.time(17, 0, 0):
-            return 'Asia'
-        elif time >= dt.time(17, 0, 0) and time < dt.time(23, 59, 59):
-            return 'London'
-        else:
-            return 'New York'
-    # Apply the custom function to create a new column
-    df['Trading Session'] = df['Time'].apply(get_trading_session)
-    df.to_sql('trades', conn, index=False, if_exists='replace')  # Replace the existing table with the updated DataFrame
-    conn.close()
+    df['Time'] = pd.to_datetime(df['Time'], format='%H:%M:%S.%f').dt.strftime('%H:%M')
+    df['Month'] = df['Month'].apply(lambda m: calendar.month_name[int(m)])
+
     return df
 
 df = load_data()
+st.write(df)
 
  
 
