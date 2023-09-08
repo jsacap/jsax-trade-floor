@@ -1,64 +1,71 @@
-Asset,Date,Time,Stop Loss,Trade Type,System Strategy,Timeframe,HTF Trend,Trade From,Day of Week,Direction,Result,R,Rolling R,Trade ID,Month,Trading Session
-GBPJPY,2023-06-30,10:00:00,43.9,trend continuation,ac,60.0,Yes,LTF KZ3,Friday,Long,-33.0,-0.75,-0.75,1,6,Asia
-NZDUSD,2023-06-30,15:00:00,18.0,advanced pattern,APB,60.0,Yes,Pi,Friday,Short,-13.2,-0.73,-1.48,2,6,Asia
-USDJPY,2023-07-03,15:11:00,31.5,counter trend,RS,60.0,No,Pi,Monday,Short,-31.5,-1.0,-2.48,3,7,Asia
-AUDUSD,2023-07-03,19:00:00,30.3,trend continuation,DB,60.0,No,Limit Order,Monday,Long,39.0,1.29,-1.19,4,7,London
-EURUSD,2023-07-04,11:10:00,34.3,counter trend,DT,60.0,Yes,LTF KZ3,Tuesday,Short,47.0,1.37,0.18000000000000016,5,7,Asia
-NZDUSD,2023-07-05,12:00:00,24.9,counter trend,DT,60.0,Yes,TTF KZ3,Wednesday,Short,27.0,1.08,1.2600000000000002,6,7,Asia
-XAUUSD,2023-07-06,23:00:00,115.24,advanced pattern,APC,60.0,No,Limit Order,Thursday,Long,175.06,1.52,2.7800000000000002,7,7,London
-AUDUSD,2023-07-07,17:00:00,27.1,trend continuation,AC,60.0,Yes,RS,Friday,Short,-27.1,-1.0,1.7800000000000002,8,7,London
-USDCAD,2023-07-07,08:00:00,25.2,counter trend,DT,60.0,No,HTF KZ1,Friday,Short,92.0,3.65,5.43,9,7,Asia
-AUS200,2023-07-10,12:30:00,14.9,advanced pattern,APB,5.0,Yes,StrLoHi,Monday,Long,-14.9,-1.0,4.43,10,7,Asia
-AUDCAD,2023-07-10,16:39:00,21.0,advanced pattern,APB,60.0,Yes,LTF KZ3,Monday,Long,-21.0,-1.0,3.4299999999999997,11,7,Asia
-GBPUSD,2023-07-12,16:18:00,22.8,counter trend,DT,60.0,No,StrLoHi,Wednesday,Short,28.0,1.23,4.66,12,7,Asia
-GBPJPY,2023-07-11,11:00:00,73.2,trend continuation,AC,60.0,Yes,RS,Tuesday,Short,150.0,2.05,6.71,13,7,Asia
-AUDUSD,2023-07-13,09:00:00,31.8,advanced pattern,APB,240.0,No,LTF KZ3,Thursday,Short,-31.8,-1.0,5.71,14,7,Asia
-XAUUSD,2023-07-14,06:24:00,114.5,advanced pattern,APB,240.0,No,VPP,Friday,Short,-10.96,-0.1,5.61,15,7,New York
-NZDUSD,2023-07-14,11:25:00,18.9,counter trend,DT,60.0,No,LTF KZ3,Friday,Short,-18.9,-1.0,4.61,16,7,Asia
-AUDUSD,2023-07-14,16:20:00,21.6,counter trend,DT,60.0,No,HTF KZ3,Friday,Short,41.4,1.92,6.53,17,7,Asia
-NZDUSD,2023-07-17,10:17:00,26.0,advanced pattern,APC,60.0,Yes,iS KZ3,Monday,Long,-26.0,-1.0,5.53,18,7,Asia
-USDCAD,2023-07-17,12:25:00,23.5,counter trend,AC,60.0,Yes,LTF KZ3,Monday,Short,31.0,1.32,6.8500000000000005,19,7,Asia
-USDJPY,2023-07-17,20:00:00,34.0,advanced pattern,APG,60.0,No,iS KZ3,Monday,Long,53.0,1.56,8.41,20,7,London
-AUDUSD,2023-07-19,05:53:00,35.3,counter trend,DB,60.0,Yes,LTF KZ1,Wednesday,Long,-35.3,-1.0,7.41,21,7,New York
-NZDUSD,2023-07-19,05:59:00,33.0,counter trend,DB,60.0,Yes,LTF KZ1,Wednesday,Long,-22.0,-0.67,6.74,22,7,New York
-GBPUSD,2023-07-19,09:02:00,30.5,counter trend,DB,60.0,Yes,Pi,Wednesday,Long,-15.0,-0.49,6.25,23,7,Asia
-AUDCAD,2023-07-19,11:51:00,33.0,advanced pattern,APB,60.0,Yes,Limit Order,Wednesday,Long,-33.0,-1.0,5.25,24,7,Asia
-GBPJPY,2023-07-20,00:00:00,80.4,advanced pattern,APB,60.0,No,LTF KZ3,Thursday,Long,0.0,0.0,5.25,25,7,New York
-USDCAD,2023-07-20,07:08:00,44.1,trend continuation,DescT,60.0,Yes,TTF KZ3,Thursday,Short,-20.1,-0.46,4.79,26,7,Asia
-audcad,2023-07-20,12:00:00,24.9,advanced pattern,APC,60.0,Yes,Limit Order,Thursday,Short,-24.9,-1.0,3.79,27,7,Asia
-USDCAD,2023-07-21,09:33:00,21.9,trend continuation,PB,60.0,No,RS,Friday,Long,29.0,1.32,5.11,28,7,Asia
-NZDUSD,2023-07-24,16:14:00,22.5,counter trend,RS,60.0,No,HTF KZ1,Monday,Long,34.0,1.51,6.62,29,7,Asia
-GBPJPY,2023-07-24,23:00:00,79.0,advanced pattern,APG,60.0,Yes,StrLoHi,Monday,Long,115.0,1.46,8.08,30,7,London
-USDCAD,2023-07-25,15:03:00,23.0,counter trend,DB,60.0,Yes,LTF KZ3,Tuesday,Long,-35.0,-1.52,6.5600000000000005,31,7,Asia
-AUDCAD,2023-07-26,11:00:00,17.0,advanced pattern,APB,60.0,Yes,StrLoHi,Wednesday,Long,-17.0,-1.0,5.5600000000000005,32,7,Asia
-EURUSD,2023-07-26,14:45:00,27.3,counter trend,RS,60.0,No,RS,Wednesday,Long,36.6,1.34,6.9,33,7,Asia
-USDJPY,2023-07-27,07:08:00,57.3,advanced pattern,APG,60.0,Yes,LTF KZ3,Thursday,Long,-13.5,-0.24,6.66,34,7,Asia
-USDJPY,2023-07-27,18:20:00,59.3,trend continuation,PB,60.0,No,VPP,Thursday,Short,-59.5,-1.0,5.66,35,7,London
-AUDCAD,2023-07-27,20:00:00,40.6,counter trend,DT,60.0,No,LTF KZ3,Thursday,Short,53.8,1.33,6.99,36,7,London
-GBPJPY,2023-07-28,03:00:00,70.9,advanced pattern,APB,60.0,Yes,HTF KZ3,Friday,Long,-70.9,-1.0,5.99,37,7,New York
-AUDCAD,2023-07-28,09:24:00,34.6,counter trend,DB,60.0,No,iS KZ3,Friday,Long,-34.6,-1.0,4.99,38,7,Asia
-USDCAD,2023-07-28,16:58:00,38.0,counter trend,DT,60.0,No,LTF KZ3,Friday,Short,55.0,1.45,6.44,39,7,Asia
-AUDUSD,2023-07-28,17:01:00,78.4,advanced pattern,APB,60.0,No,iS KZ3,Friday,Long,78.4,1.0,7.44,40,7,London
-AUDCAD,2023-07-31,16:31:00,45.4,advanced pattern,APB,60.0,Yes,LTF KZ1,Monday,Short,75.5,1.66,9.1,41,7,Asia
-EURUSD,2023-08-02,08:17:00,18.0,advanced pattern,APB,60.0,Yes,LTF KZ1,Wednesday,Short,-18.0,-1.0,8.1,42,8,Asia
-USDJPY,2023-08-21,17:43:00,41.5,trend continuation,PB,60.0,,,Monday,Short,41.5,1.0,9.1,43,8,London
-GBPUSD,2023-08-22,10:11:00,20.0,trend continuation,AT,60.0,,,Tuesday,Long,28.6,1.43,10.53,44,8,Asia
-AUDUSD,2023-08-22,17:00:00,22.6,counter trend,APB,60.0,,,Tuesday,Short,0.0,0.0,10.53,45,8,London
-AUDCAD,2023-08-22,06:59:00,21.0,trend continuation,APB,60.0,,,Tuesday,Short,35.7,1.7,12.229999999999999,46,8,New York
-AUDCAD,2023-08-23,09:33:00,20.6,trend continuation,PB,60.0,,TL,Wednesday,Long,-7.0,-0.34,11.889999999999999,47,8,Asia
-NZDUSD,2023-08-23,16:35:00,17.8,trend continuation,PB,60.0,,TL,Wednesday,Long,-17.8,-1.0,10.889999999999999,48,8,Asia
-USDCAD,2023-08-23,16:58:00,27.4,trend continuation,SF,60.0,,TL,Wednesday,Long,48.0,1.75,12.639999999999999,49,8,Asia
-USDJPY,2023-08-23,23:00:00,38.0,trend continuation,APB,60.0,Yes,HTF KZ3,Wednesday,Long,-38.0,-1.0,11.639999999999999,50,8,London
-NZDUSD,2023-08-24,07:22:00,20.0,trend continuation,PB,60.0,Yes,TL,Thursday,Long,-20.0,-1.0,10.639999999999999,51,8,Asia
-AUDCAD,2023-08-24,07:26:00,20.0,trend continuation,PB,60.0,Yes,TL,Thursday,Long,-15.0,-0.75,9.889999999999999,52,8,Asia
-AUDCAD,2023-08-24,07:29:00,32.2,counter trend,DT,60.0,Yes,LTF KZ3,Thursday,Short,48.0,1.49,11.379999999999999,53,8,Asia
-AUDUSD,2023-08-23,07:45:00,28.0,advanced pattern,APG,60.0,Yes,HTF KZ3,Wednesday,Short,35.7,1.28,12.659999999999998,54,8,Asia
-USDCAD,2023-08-24,09:03:00,30.0,trend continuation,DB,60.0,Yes,TL,Thursday,Long,43.0,1.43,14.089999999999998,55,8,Asia
-USDCAD,2023-08-25,12:52:00,15.2,counter trend,DT,60.0,No,HTF KZ3,Friday,Short,-15.2,-1.0,13.089999999999998,56,8,Asia
-USDJPY,2023-08-25,17:03:00,34.0,counter trend,DT,60.0,Yes,TL,Friday,Short,-34.0,-1.0,12.089999999999998,57,8,London
-GBPJPY,2023-08-30,17:00:00,60.4,counter trend,PB,60.0,No,TL,Wednesday,Long,89.7,1.49,13.579999999999998,58,8,London
-USDCAD,2023-08-30,16:00:00,32.8,advanced pattern,APB,60.0,Yes,LTF KZ3,Wednesday,Long,-8.4,-0.26,13.319999999999999,59,8,Asia
-GBPUSD,2023-08-30,16:02:00,47.7,advanced pattern,APB,60.0,Yes,LTF KZ3,Wednesday,Short,65.0,1.36,14.679999999999998,60,8,Asia
-AUDCAD,2023-08-31,09:00:00,30.4,trend continuation,DC,60.0,Yes,LTF KZ3,Thursday,Long,-18.7,-0.62,14.059999999999999,61,8,Asia
-XAUUSD,2023-08-31,16:05:00,62.66,counter trend,DT,60.0,No,iS KZ3,Thursday,Short,0.0,0.0,14.059999999999999,62,8,Asia
-AUDCAD,2023-09-01,12:28:00,19.9,trend continuation,DescT,60.0,No,TL,Friday,Short,29.0,1.46,15.52,63,9,Asia
+Asset,Date,Time,Stop Loss,Trade Type,System Strategy,Timeframe,HTF Trend,Trade From,Day of Week,Direction,Result,R,Rolling R,Trade ID,Month,Trading Session,Trade Execution,Trade Exit
+GBPJPY,2023-06-30,10:00:00,43.9,trend continuation,ac,60.0,Yes,LTF KZ3,Friday,Long,-33.0,-0.75,-0.75,1.0,6,Asia, , 
+NZDUSD,2023-06-30,15:00:00,18.0,advanced pattern,APB,60.0,Yes,Pi,Friday,Short,-13.2,-0.73,-1.48,2.0,6,Asia, , 
+USDJPY,2023-07-03,15:11:00,31.5,counter trend,RS,60.0,No,Pi,Monday,Short,-31.5,-1.0,-2.48,3.0,7,Asia, , 
+AUDUSD,2023-07-03,19:00:00,30.3,trend continuation,DB,60.0,No,Limit Order,Monday,Long,39.0,1.29,-1.19,4.0,7,London, , 
+EURUSD,2023-07-04,11:10:00,34.3,counter trend,DT,60.0,Yes,LTF KZ3,Tuesday,Short,47.0,1.37,0.18000000000000016,5.0,7,Asia, , 
+NZDUSD,2023-07-05,12:00:00,24.9,counter trend,DT,60.0,Yes,TTF KZ3,Wednesday,Short,27.0,1.08,1.2600000000000002,6.0,7,Asia, , 
+XAUUSD,2023-07-06,23:00:00,115.24,advanced pattern,APC,60.0,No,Limit Order,Thursday,Long,175.06,1.52,2.7800000000000002,7.0,7,London, , 
+AUDUSD,2023-07-07,17:00:00,27.1,trend continuation,AC,60.0,Yes,RS,Friday,Short,-27.1,-1.0,1.7800000000000002,8.0,7,London, , 
+USDCAD,2023-07-07,08:00:00,25.2,counter trend,DT,60.0,No,HTF KZ1,Friday,Short,92.0,3.65,5.43,9.0,7,Asia, , 
+AUS200,2023-07-10,12:30:00,14.9,advanced pattern,APB,5.0,Yes,StrLoHi,Monday,Long,-14.9,-1.0,4.43,10.0,7,Asia, , 
+AUDCAD,2023-07-10,16:39:00,21.0,advanced pattern,APB,60.0,Yes,LTF KZ3,Monday,Long,-21.0,-1.0,3.4299999999999997,11.0,7,Asia, , 
+GBPUSD,2023-07-12,16:18:00,22.8,counter trend,DT,60.0,No,StrLoHi,Wednesday,Short,28.0,1.23,4.66,12.0,7,Asia, , 
+GBPJPY,2023-07-11,11:00:00,73.2,trend continuation,AC,60.0,Yes,RS,Tuesday,Short,150.0,2.05,6.71,13.0,7,Asia, , 
+AUDUSD,2023-07-13,09:00:00,31.8,advanced pattern,APB,240.0,No,LTF KZ3,Thursday,Short,-31.8,-1.0,5.71,14.0,7,Asia, , 
+XAUUSD,2023-07-14,06:24:00,114.5,advanced pattern,APB,240.0,No,VPP,Friday,Short,-10.96,-0.1,5.61,15.0,7,New York, , 
+NZDUSD,2023-07-14,11:25:00,18.9,counter trend,DT,60.0,No,LTF KZ3,Friday,Short,-18.9,-1.0,4.61,16.0,7,Asia, , 
+AUDUSD,2023-07-14,16:20:00,21.6,counter trend,DT,60.0,No,HTF KZ3,Friday,Short,41.4,1.92,6.53,17.0,7,Asia, , 
+NZDUSD,2023-07-17,10:17:00,26.0,advanced pattern,APC,60.0,Yes,iS KZ3,Monday,Long,-26.0,-1.0,5.53,18.0,7,Asia, , 
+USDCAD,2023-07-17,12:25:00,23.5,counter trend,AC,60.0,Yes,LTF KZ3,Monday,Short,31.0,1.32,6.8500000000000005,19.0,7,Asia, , 
+USDJPY,2023-07-17,20:00:00,34.0,advanced pattern,APG,60.0,No,iS KZ3,Monday,Long,53.0,1.56,8.41,20.0,7,London, , 
+AUDUSD,2023-07-19,05:53:00,35.3,counter trend,DB,60.0,Yes,LTF KZ1,Wednesday,Long,-35.3,-1.0,7.41,21.0,7,New York, , 
+NZDUSD,2023-07-19,05:59:00,33.0,counter trend,DB,60.0,Yes,LTF KZ1,Wednesday,Long,-22.0,-0.67,6.74,22.0,7,New York, , 
+GBPUSD,2023-07-19,09:02:00,30.5,counter trend,DB,60.0,Yes,Pi,Wednesday,Long,-15.0,-0.49,6.25,23.0,7,Asia, , 
+AUDCAD,2023-07-19,11:51:00,33.0,advanced pattern,APB,60.0,Yes,Limit Order,Wednesday,Long,-33.0,-1.0,5.25,24.0,7,Asia, , 
+GBPJPY,2023-07-20,00:00:00,80.4,advanced pattern,APB,60.0,No,LTF KZ3,Thursday,Long,0.0,0.0,5.25,25.0,7,New York, , 
+USDCAD,2023-07-20,07:08:00,44.1,trend continuation,DescT,60.0,Yes,TTF KZ3,Thursday,Short,-20.1,-0.46,4.79,26.0,7,Asia, , 
+audcad,2023-07-20,12:00:00,24.9,advanced pattern,APC,60.0,Yes,Limit Order,Thursday,Short,-24.9,-1.0,3.79,27.0,7,Asia, , 
+USDCAD,2023-07-21,09:33:00,21.9,trend continuation,PB,60.0,No,RS,Friday,Long,29.0,1.32,5.11,28.0,7,Asia, , 
+NZDUSD,2023-07-24,16:14:00,22.5,counter trend,RS,60.0,No,HTF KZ1,Monday,Long,34.0,1.51,6.62,29.0,7,Asia, , 
+GBPJPY,2023-07-24,23:00:00,79.0,advanced pattern,APG,60.0,Yes,StrLoHi,Monday,Long,115.0,1.46,8.08,30.0,7,London, , 
+USDCAD,2023-07-25,15:03:00,23.0,counter trend,DB,60.0,Yes,LTF KZ3,Tuesday,Long,-35.0,-1.52,6.5600000000000005,31.0,7,Asia, , 
+AUDCAD,2023-07-26,11:00:00,17.0,advanced pattern,APB,60.0,Yes,StrLoHi,Wednesday,Long,-17.0,-1.0,5.5600000000000005,32.0,7,Asia, , 
+EURUSD,2023-07-26,14:45:00,27.3,counter trend,RS,60.0,No,RS,Wednesday,Long,36.6,1.34,6.9,33.0,7,Asia, , 
+USDJPY,2023-07-27,07:08:00,57.3,advanced pattern,APG,60.0,Yes,LTF KZ3,Thursday,Long,-13.5,-0.24,6.66,34.0,7,Asia, , 
+USDJPY,2023-07-27,18:20:00,59.3,trend continuation,PB,60.0,No,VPP,Thursday,Short,-59.5,-1.0,5.66,35.0,7,London, , 
+AUDCAD,2023-07-27,20:00:00,40.6,counter trend,DT,60.0,No,LTF KZ3,Thursday,Short,53.8,1.33,6.99,36.0,7,London, , 
+GBPJPY,2023-07-28,03:00:00,70.9,advanced pattern,APB,60.0,Yes,HTF KZ3,Friday,Long,-70.9,-1.0,5.99,37.0,7,New York, , 
+AUDCAD,2023-07-28,09:24:00,34.6,counter trend,DB,60.0,No,iS KZ3,Friday,Long,-34.6,-1.0,4.99,38.0,7,Asia, , 
+USDCAD,2023-07-28,16:58:00,38.0,counter trend,DT,60.0,No,LTF KZ3,Friday,Short,55.0,1.45,6.44,39.0,7,Asia, , 
+AUDUSD,2023-07-28,17:01:00,78.4,advanced pattern,APB,60.0,No,iS KZ3,Friday,Long,78.4,1.0,7.44,40.0,7,London, , 
+AUDCAD,2023-07-31,16:31:00,45.4,advanced pattern,APB,60.0,Yes,LTF KZ1,Monday,Short,75.5,1.66,9.1,41.0,7,Asia, , 
+EURUSD,2023-08-02,08:17:00,18.0,advanced pattern,APB,60.0,Yes,LTF KZ1,Wednesday,Short,-18.0,-1.0,8.1,42.0,8,Asia, , 
+USDJPY,2023-08-21,17:43:00,41.5,trend continuation,PB,60.0,,,Monday,Short,41.5,1.0,9.1,43.0,8,London, , 
+GBPUSD,2023-08-22,10:11:00,20.0,trend continuation,AT,60.0,,,Tuesday,Long,28.6,1.43,10.53,44.0,8,Asia, , 
+AUDUSD,2023-08-22,17:00:00,22.6,counter trend,APB,60.0,,,Tuesday,Short,0.0,0.0,10.53,45.0,8,London, , 
+AUDCAD,2023-08-22,06:59:00,21.0,trend continuation,APB,60.0,,,Tuesday,Short,35.7,1.7,12.229999999999999,46.0,8,New York, , 
+AUDCAD,2023-08-23,09:33:00,20.6,trend continuation,PB,60.0,,TL,Wednesday,Long,-7.0,-0.34,11.889999999999999,47.0,8,Asia, , 
+NZDUSD,2023-08-23,16:35:00,17.8,trend continuation,PB,60.0,,TL,Wednesday,Long,-17.8,-1.0,10.889999999999999,48.0,8,Asia, , 
+USDCAD,2023-08-23,16:58:00,27.4,trend continuation,SF,60.0,,TL,Wednesday,Long,48.0,1.75,12.639999999999999,49.0,8,Asia, , 
+USDJPY,2023-08-23,23:00:00,38.0,trend continuation,APB,60.0,Yes,HTF KZ3,Wednesday,Long,-38.0,-1.0,11.639999999999999,50.0,8,London, , 
+NZDUSD,2023-08-24,07:22:00,20.0,trend continuation,PB,60.0,Yes,TL,Thursday,Long,-20.0,-1.0,10.639999999999999,51.0,8,Asia, , 
+AUDCAD,2023-08-24,07:26:00,20.0,trend continuation,PB,60.0,Yes,TL,Thursday,Long,-15.0,-0.75,9.889999999999999,52.0,8,Asia, , 
+AUDCAD,2023-08-24,07:29:00,32.2,counter trend,DT,60.0,Yes,LTF KZ3,Thursday,Short,48.0,1.49,11.379999999999999,53.0,8,Asia, , 
+AUDUSD,2023-08-23,07:45:00,28.0,advanced pattern,APG,60.0,Yes,HTF KZ3,Wednesday,Short,35.7,1.28,12.659999999999998,54.0,8,Asia, , 
+USDCAD,2023-08-24,09:03:00,30.0,trend continuation,DB,60.0,Yes,TL,Thursday,Long,43.0,1.43,14.089999999999998,55.0,8,Asia, , 
+USDCAD,2023-08-25,12:52:00,15.2,counter trend,DT,60.0,No,HTF KZ3,Friday,Short,-15.2,-1.0,13.089999999999998,56.0,8,Asia, , 
+USDJPY,2023-08-25,17:03:00,34.0,counter trend,DT,60.0,Yes,TL,Friday,Short,-34.0,-1.0,12.089999999999998,57.0,8,London, , 
+GBPJPY,2023-08-30,17:00:00,60.4,counter trend,PB,60.0,No,TL,Wednesday,Long,89.7,1.49,13.579999999999998,58.0,8,London, , 
+USDCAD,2023-08-30,16:00:00,32.8,advanced pattern,APB,60.0,Yes,LTF KZ3,Wednesday,Long,-8.4,-0.26,13.319999999999999,59.0,8,Asia, , 
+GBPUSD,2023-08-30,16:02:00,47.7,advanced pattern,APB,60.0,Yes,LTF KZ3,Wednesday,Short,65.0,1.36,14.679999999999998,60.0,8,Asia, , 
+AUDCAD,2023-08-31,09:00:00,30.4,trend continuation,DC,60.0,Yes,LTF KZ3,Thursday,Long,-18.7,-0.62,14.059999999999999,61.0,8,Asia, , 
+XAUUSD,2023-08-31,16:05:00,62.66,counter trend,DT,60.0,No,iS KZ3,Thursday,Short,-19.32,-0.31,13.749999999999998,62.0,8,Asia, , 
+AUDCAD,2023-09-01,12:28:00,19.9,trend continuation,DescT,60.0,No,TL,Friday,Short,29.0,1.46,15.209999999999997,63.0,9,Asia, , 
+USDJPY,2023-09-05,09:29:00,15.8,trend continuation,AT,60.0,Yes,TL,Tuesday,Long,20.0,1.27,16.479999999999997,64.0,9,Asia,https://www.tradingview.com/x/jldtQuFu/,https://www.tradingview.com/x/wEykX2oO/
+AUDUSD,2023-09-05,13:00:00,35.0,advanced pattern,APG,60.0,Yes,LTF KZ3,Tuesday,Long,-35.0,-1.0,15.479999999999997,65.0,9,Asia,https://www.tradingview.com/x/lstxmVB0/,https://www.tradingview.com/x/b3wtoRAt/
+GBPUSD,2023-09-05,17:04:00,35.3,trend continuation,PB,60.0,Yes,TL,Tuesday,Short,51.9,1.47,16.949999999999996,66.0,9,London,https://www.tradingview.com/x/nWdzXYK9/,https://www.tradingview.com/x/41cZ3RwE/
+XAUUSD,2023-09-05,13:00:00,35.04,trend continuation,PB,60.0,Yes,TL,Tuesday,Long,-35.04,-1.0,15.949999999999996,67.0,9,Asia,https://www.tradingview.com/x/iNxDmogN/,
+USDCAD,2023-09-06,09:01:00,19.9,counter trend,PB,60.0,No,TL,Wednesday,Short,-19.9,-1.0,14.949999999999996,68.0,9,Asia,https://www.tradingview.com/x/bj98BxUJ/,https://www.tradingview.com/x/bRNkw2uh/
+GBPJPY,2023-09-06,09:03:00,43.4,counter trend,PB,60.0,No,TL,Wednesday,Short,55.0,1.27,16.219999999999995,69.0,9,Asia,https://www.tradingview.com/x/kMYE2km4/,https://www.tradingview.com/x/XI7hIa1A/
+AUDCAD,2023-09-07,16:13:00,28.2,counter trend,DB,60.0,No,TL,Thursday,Long,0.0,0.0,16.219999999999995,,9,Asia,https://www.tradingview.com/x/7ASdBDIv/,

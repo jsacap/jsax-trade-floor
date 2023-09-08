@@ -63,7 +63,7 @@ To close a trade, double-click the "Result" cell of the trade you wish to close,
 
 # Functions for calculations
 def date_format():
-    df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
+    df['Date'] = pd.to_datetime(df['Date'])
     df['Day of Week'] = df['Date'].dt.day_name()
     return df
 

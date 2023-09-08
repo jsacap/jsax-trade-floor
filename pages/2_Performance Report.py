@@ -4,6 +4,8 @@ import calendar
 import datetime as dt
 import requests
 import pandas as pd
+import matplotlib.pyplot as plt
+
 
 import streamlit as st
 import streamlit_extras
@@ -73,17 +75,12 @@ def load_data():
     df = pd.read_sql(query, conn)
     conn.close()
     return df
-    df['Date'] = pd.to_datetime(df['Date'])
-    df['Month'] = df['Date'].dt.month
-    df['Time'] = pd.to_datetime(df['Time'], format='%H:%M:%S.%f').dt.strftime('%H:%M')
 
 df = load_data()
+df['Date'] = pd.to_datetime(df['Date'])
+df['Month'] = df['Date'].dt.month
+df['Time'] = pd.to_datetime(df['Time'], format='%H:%M:%S.%f').dt.strftime('%H:%M')
 df['Month'] = df['Month'].apply(lambda m: calendar.month_name[int(m)])
-
-st.write(df)
-
- 
-
 
 
 st.write(f"""
@@ -142,230 +139,22 @@ mt3.metric('Peak Value', round(df['Rolling R'].max(), 2))
 mt4.metric('Max Drawdown', largest_drawdown)
 mt5.metric('Profit Factor', profit_factor)
 
-#Overall report
-# if selected_month == 'Overall Performance':
-st.write(f"""
-    # Overview
-    This is the {selected_month} report.
-    The total gain (in R multiple) during this period  is {overall_r}. 
-    During this period, the largest drawdown experienced was at {largest_drawdown}.
-    The strongest trade was the {top_asset} returning a total of {top_asset_r}! 
-    This was executed through a {top_wins['System Strategy'].values[0]} entering at
-    the {top_wins['Trade From'].values[0]} structure.
-    Trades executed during the {top_session} session has been most profitable 
-    returning a total of {top_session_r}R whereas the weakest session was the 
-    {trading_session_r.index[2]} with a return of {round(trading_session_r.values[2], 2)}. 
-    Trades during the {trading_session_r.index[1]} came in at second returning {trading_session_r.values[1]}R.
-    Here are a couple charts to plot the overview.
-""")
-    
-# Plotting the overview chart
-# Strike Rate
+# Variables
 
-def plot_strike_rate():
-    wins = selected_df[selected_df['R'] > 0]['R'].count()
-    losses = selected_df[selected_df['R'] < 0]['R'].count()
-    total_trades = wins + losses
-    strike_rate = wins / total_trades
-    win_percentage = round(strike_rate * 100, 2)
-    annotation_text = f'{round(win_percentage, 2)}%'
-
-    fig = px.pie(
-        names=['Wins', 'Losses'],
-        values=[wins, losses],
-        title='Strike Rate',
-        hole=0.7,
-        labels={'Wins': 'Wins', 'Losses': 'Losses'}, 
-    )
-    fig.update_traces(
-        marker=dict(colors=['#1717bd', '#2e2e40']),
-        text=[f'{wins} Wins', f'{losses} Losses'],  # Display the actual win and loss counts in the chart
-        textinfo='none',  # Display both the percentage and label (Wins/Losses)
-    )
-    fig.add_annotation(
-        text=annotation_text,
-        x=0.5, y=0.5,  # Position of the annotation in the center of the hole
-        showarrow=False,  # Hide the arrow for the annotation
-        font=dict(size=32),  # Customize the font size of the annotation
-    )
-    st.plotly_chart(fig)
-
-def plot_rolling_r():
-    fig = px.line(selected_df, x='Trade ID', y='Rolling R', title='R CUrve')
-    fig.update_layout(plot_bgcolor='#0a0a0a')
-    st.plotly_chart(fig)
-
-def plot_asset_r():
-    fig = px.bar(asset_r, x='Asset', y='R', title='Asset Traded Based Returns')
-    fig.update_layout(plot_bgcolor='#0a0a0a')
-    st.plotly_chart(fig)
-
-col1, col2, coll3  = st.columns(3)
-with col1:
-    plot_rolling_r()
-with col2:
-    plot_asset_r()
-with coll3:
-    plot_strike_rate()
-
-
-# Variables used for the Trade Type section
-trade_type = df.groupby('Trade Type')['R'].sum().sort_values(ascending=False).reset_index()
-trade_type_list = [trade_type_name.title() for trade_type_name in trade_type['Trade Type']]
-trade_type_string = ', '.join(trade_type_list)
-trade_type_1 = trade_type['Trade Type'].iloc[0]
-trade_type_2 = trade_type['Trade Type'].iloc[1]
-trade_type_3 = trade_type['Trade Type'].iloc[2]
-trade_type1_df = df[df['Trade Type'] == trade_type_1]
-trade_type2_df = df[df['Trade Type'] == trade_type_2]
-trade_type3_df = df[df['Trade Type'] == trade_type_3]
-# trade_type1_df = trade_type1_df.groupby(['Asset', 'System Strategy', 'Trade From'])['R'].sum().sort_values(ascending=False).reset_index()
-trade_type1_asset = trade_type1_df.groupby('Asset')['R'].sum().sort_values(ascending=False).reset_index()
-trade_type1_system = trade_type1_df.groupby('System Strategy')['R'].sum().sort_values(ascending=False).reset_index()
-trade_type1_tradefrom = trade_type1_df.groupby('Trade From')['R'].sum().sort_values(ascending=False).reset_index()
-st.write(f"""
-# Diving Deeper
-Let's take a deep dive into the stats to gain more valuable insights.
-         
-## Who, What & Where
-         This section will run through the who(Assets), the what(Strategies), and
-         where (structure of where the trade was taken).
-The total number of trade types in the trading data is {len(trade_type)}:
- {trade_type_string}. With each of these trade types this is how they 
-performed: 
-- The strongest one being {trade_type['Trade Type'].iloc[0]} returning 
-a total of {trade_type['R'].iloc[0]}R. 
-- Followed by {trade_type['Trade Type'].iloc[1]}
- returning a total of {trade_type['R'].iloc[1]} 
- - Lastly, the {trade_type['Trade Type'].iloc[2]}
- with a return of {trade_type['R'].iloc[2]}.
- 
-
- ### {trade_type['Trade Type'].iloc[0].title()}
-Starting witht the top of the list and working our way down we can take a better
-look at which type of {trade_type['Trade Type'].iloc[0]} trades worked best
-with different setups and where they were traded from. Filtering the data
-I will present this through the dataframe itself, followed by a couple plots to 
-visualise our data. I have listed the tables below that describe each of the 
-variables in the execution of the {trade_type_1} trade3
-The {trade_type_1.title()} setups accu,accumulated a total return of {trade_type1_df['R'].sum()}R.
-
-""")
-
-# Charting the data
-
-def plot_trade_type1_asset():
-    fig = px.scatter(trade_type1_asset, x='Asset', y='R', 
-                     height=400, title='Asset Scatter Plot')
-    st.plotly_chart(fig)
-
-def plot_trade_type2_asset():
-    fig = px.scatter(trade_type2_asset, x='Asset', y='R', 
-                     height=400, title='Asset Scatter Plot')
-    st.plotly_chart(fig)
-
-def plot_trade_type1_system():
-    fig = px.bar(trade_type1_system, x='R', y='System Strategy', orientation='h',
-                 title=f'{trade_type_1} Strategy Performance')
-    st.plotly_chart(fig)
-
-def plot_trade_type1_positive():
-    positive_df = trade_type1_df[trade_type1_df['R'] >= 0]
-    fig_positive = px.scatter_3d(positive_df, x='Asset', y='System Strategy', z='Trade From', 
-                            color='R', color_continuous_scale='Viridis', opacity=0.7, 
-                            title='Scatter Plot based on Winning Trades')
-    fig_positive.update_layout(scene=dict(bgcolor='#0a0a0a'))
-    st.plotly_chart(fig_positive)
-
-
-# def plot_trade_system_pie():
-#     positive_df = trade_type1_df[trade_type1_df['R'] >= 0]
-#     fig = px.pie(positive_df, values='R', names='Asset', title='Profitable Assets Traded')
-#     color_scale = px.colors.sequential.Viridis  # You can use any color scale
-#     fig.update_traces(marker=dict(colors=color_scale))
-#     st.plotly_chart(fig)
-
-# def plot_system_bar():
-#     positive_df = trade_type1_df[trade_type1_df['R'] >= 0]
-#     fig = px.bar(positive_df, x='R', y='System Strategy', orientation='h')
-
-#     st.plotly_chart(fig)
-
-# Plotting 
-trade_type1_df
-
-col3, col4, col5 = st.columns([1, 3, 3])
-with col3:
-    trade_type1_asset
-with col4:
-    # plot_trade_type1_asset()
-    st.bar_chart(trade_type1_asset, x='Asset', y='R')
-with col5:
-    plot_trade_type1_asset()
-
-col6, col7, col8 = st.columns([1, 3, 3])
-with col6:
-    trade_type1_system
-with col7:
-    st.bar_chart(trade_type1_system, x='System Strategy', y='R', height=400)
-with col8:
-    st.area_chart(trade_type1_system, x='R', y='System Strategy')
-
-col9, col10, col11 = st.columns([1, 3, 3])
-with col9:
-    trade_type1_tradefrom
-with col10:
-    st.bar_chart(trade_type1_tradefrom, x='R', y='Trade From')
-with col11:
-    st.area_chart(trade_type1_tradefrom, x='Trade From', y='R')
-
-st.write(f"""
-### {trade_type_2.title()}
-Next on the list of trades to analyse is the {trade_type_2.title()}. These types of
-trades closed at a total R of {trade_type2_df['R'].sum()}. The top performer here was 
-the 
-{trade_type1_df.groupby('Asset').sum().sort_values(by='R', ascending=False).reset_index().iloc[0]['Asset']}
-which returned a total of 
-{trade_type1_df.groupby('Asset').sum().sort_values(by='R', ascending=False).reset_index().iloc[0]['R']}
-On the flipside, the weakest performing asset was the
-{trade_type1_df.groupby('Asset').sum().sort_values(by='R', ascending=False).reset_index().iloc[-1]['Asset']}
-which closed at 
-{trade_type1_df.groupby('Asset').sum().sort_values(by='R', ascending=False).reset_index().iloc[-1]['R']}
-Now, to visualise our data, we will be plotting the same charts as we did in the 
-{trade_type_1} section.
-""")
-
-# Variables for next section
-trade_type2_asset = trade_type1_df.groupby('Asset')['R'].sum().sort_values(ascending=False).reset_index()
-trade_type2_system = trade_type1_df.groupby('System Strategy')['R'].sum().sort_values(ascending=False).reset_index()
-trade_type2_tradefrom = trade_type1_df.groupby('Trade From')['R'].sum().sort_values(ascending=False).reset_index()
 
 # Charting
+def plot_rollingr():
+    fig = px.line(df, x='Trade ID', 
+                  y='Rolling R', 
+                  title='Performance',
+                #   hover_data=['Asset']
+                )
+    st.plotly_chart(fig)
 
-# Plotting 
-trade_type2_df
 
-col12, col13, col14 = st.columns([1, 3, 3])
-with col12:
-    trade_type2_asset
-with col13:
-    # plot_trade_type2_asset()
-    st.bar_chart(trade_type2_asset, x='Asset', y='R')
-with col14:
-    plot_trade_type2_asset()
+plot_rollingr
 
-col15, col16, col17 = st.columns([1, 3, 3])
-with col15:
-    trade_type2_system
-with col16:
-    st.bar_chart(trade_type2_system, x='System Strategy', y='R', height=400)
-with col17:
-    st.area_chart(trade_type2_system, x='R', y='System Strategy')
-
-col18, col19, col20 = st.columns([1, 3, 3])
-with col18:
-    trade_type2_tradefrom
-with col19:
-    st.bar_chart(trade_type2_tradefrom, x='R', y='Trade From')
-with col20:
-    st.area_chart(trade_type2_tradefrom, x='Trade From', y='R')
+st.write(f'''
+# Overview
+         During this period, our trading system returned a total of 
+''')

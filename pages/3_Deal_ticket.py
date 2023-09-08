@@ -56,7 +56,6 @@ col1, col2 = st.columns(2)
 with col1:
     asset = st.text_input("Asset")
     date = st.date_input("Date", dt.datetime.now().date())
-    date_str = date.strftime("%d/%m/%Y")  # Format the date
     time = st.time_input("Time", value=dt.datetime.now(
     ).time().replace(second=0, microsecond=0))
     stop_loss = st.number_input("Stop Loss")
@@ -72,6 +71,7 @@ with col2:
         'HTF KZ1', 'HTF KZ3', 'LTF KZ1', 'LTF KZ3', 'TTF KZ1', 'TTF KZ3', 'iS KZ1', 'iS KZ3', 'VPP', 'Pi', 'TL'])
     direction = st.selectbox("Direction", ['Long', 'Short'])
     result = st.number_input("Result")
+    trade_execution = st.text_input('Enter Screenshot Link')
 
 # Apply custom CSS styling
 st.markdown("""
@@ -105,12 +105,12 @@ with st.form(key='new_trade_form'):
             rolling_r = r
 
         # Ensure correct date format to db
-        date_str = date.strftime("%d/%m/%Y")
+        date_str = date.strftime("%Y-%m-%d")
 
         # Create a new row dictionary
         new_row = {
             'Asset': asset,
-            'Date': date_str,
+            'Date': date,
             'Time': time,
             'Stop Loss': stop_loss,
             'Trade Type': trade_type,
@@ -122,7 +122,8 @@ with st.form(key='new_trade_form'):
             'Direction': direction,
             'Result': result,
             'R': r,
-            'Rolling R': rolling_r
+            'Rolling R': rolling_r,
+            'Trade Execution': trade_execution
         }
 
         
